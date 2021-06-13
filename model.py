@@ -30,3 +30,10 @@ class FSRCNN(nn.Model):
         )
 
         self.deconvolution = nn.ConvTranspose2D(d, 1, 9, stride=n)
+
+    def forward(self, x):
+        x = self.feature_extraction(x)
+        x = self.shrinking(x)
+        x = self.non_linear_mapping(x)
+        x = self.expanding(x)
+        return self.deconvolution(x)
