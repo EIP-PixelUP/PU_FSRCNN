@@ -5,6 +5,7 @@ from torch import nn
 from torch.utils.data import DataLoader
 import h5py
 from tqdm import tqdm
+from pathlib import Path
 
 from datasets import TrainDataset, TestDataset
 from model import FSRCNN
@@ -13,6 +14,9 @@ from config import model_settings, batch_size, learning_rate, epochs
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 with h5py.File("datasets/General-100.h5") as f:
+
+    outdir = Path("out")
+    outdir.mkdir(exist_ok=True)
 
     # Create data loaders.
     train_dataloader = DataLoader(
@@ -60,5 +64,7 @@ with h5py.File("datasets/General-100.h5") as f:
     for t in range(epochs):
         print(f"Epoch {t+1}\n-------------------------------")
         train(train_dataloader, model, loss_fn, optimizer)
+        torch.save(model.state_dict(), outdir / f"epoch_{t}.pth")
         test(test_dataloader, model)
+    torch.save(model.state_dict(), outdir / "result.pth")
     print("Done!")
