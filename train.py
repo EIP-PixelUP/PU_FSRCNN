@@ -21,7 +21,7 @@ with h5py.File("datasets/General-100.h5") as f:
     # Create data loaders.
     train_dataloader = DataLoader(
         TrainDataset(f["train"]), batch_size=batch_size, shuffle=True)
-    test_dataloader = DataLoader(TestDataset(f["test"]), batch_size=batch_size)
+    test_dataloader = DataLoader(TestDataset(f["test"]), batch_size=1)
 
     # Create the model
     model = FSRCNN(**model_settings).to(device)
