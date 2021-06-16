@@ -1,0 +1,9 @@
+{
+	"datasets" : [
+		{
+			"name"		:	"General-100",
+			"format"	:	"zip",
+			"url"		:	"https://eip.epitech.eu/2023/pixelup/data/General-100.zip"
+		}
+	]
+}
