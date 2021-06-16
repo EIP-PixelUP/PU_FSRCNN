@@ -7,29 +7,30 @@ def Conv(filter_size: int, filters: int, channels: int):
     return nn.Conv2d(channels, filters, filter_size, padding=filter_size//2)
 
 
-class FSRCNN(nn.Model):
-    def __init__(self, *, channels=1, d, s, m, n):
+class FSRCNN(nn.Module):
+    def __init__(self, *, channels=1, d, s, m, scale):
         super(FSRCNN, self).__init__()
         self.feature_extraction = nn.Sequential(
             Conv(5, d, 1),
-            nn.PReLu(d),
+            nn.PReLU(),
         )
 
         self.shrinking = nn.Sequential(
             Conv(1, s, d),
-            nn.PReLu(s),
+            nn.PReLU(),
         )
 
         self.non_linear_mapping = nn.Sequential(*(
             Conv(3, s, s) for _ in range(m)
-        ), nn.PReLu(s))
+        ), nn.PReLU())
 
         self.expanding = nn.Sequential(
             Conv(1, d, s),
-            nn.PReLu(d)
+            nn.PReLU()
         )
 
-        self.deconvolution = nn.ConvTranspose2D(d, 1, 9, stride=n)
+        self.deconvolution = nn.ConvTranspose2d(
+            d, channels, 9, stride=scale, padding=9//2, output_padding=scale-1)
 
     def forward(self, x):
         x = self.feature_extraction(x)
