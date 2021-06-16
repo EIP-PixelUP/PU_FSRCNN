@@ -26,8 +26,8 @@ class TestDataset(Dataset):
         self.h5_file = h5_file
 
     def __getitem__(self, idx):
-        return (np.expand_dims(self.h5_file["input"][str(idx)] / 255., 0).astype(np.float32),
-                np.expand_dims(self.h5_file["output"][str(idx)] / 255., 0).astype(np.float32))
+        return (np.expand_dims(self.h5_file["input"][str(idx)][()] / 255., 0).astype(np.float32),
+                np.expand_dims(self.h5_file["output"][str(idx)][()] / 255., 0).astype(np.float32))
 
     def __len__(self):
         return len(self.h5_file["input"])
