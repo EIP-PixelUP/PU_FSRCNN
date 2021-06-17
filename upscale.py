@@ -7,6 +7,7 @@ import numpy as np
 from model import FSRCNN
 from config import model_settings
 from pathlib import Path
+import onnxruntime
 
 usage =\
     """
@@ -18,14 +19,27 @@ usage =\
 
 
 class Upscaler:
-    def __init__(self, weights, scale):
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
-
-        self.model = FSRCNN(**model_settings).to(self.device)
-        self.model.load_state_dict(torch.load(weights))
-        self.model.eval()
-
+    def __init__(self, weigths, scale, *, onnx):
+        self.onnx = onnx
         self.scale = scale
+
+        if onnx:
+            self.session = onnxruntime.InferenceSession("fsrcnn.onnx")
+        else:
+            self.device = "cuda" if torch.cuda.is_available() else "cpu"
+            self.model = FSRCNN(**model_settings).to(self.device)
+            self.model.load_state_dict(torch.load(weigths))
+            self.model.eval()
+
+    def _upscale(self, data: np.ndarray):
+        if self.onnx:
+            input_name = self.session.get_inputs()[0].name
+            print(input_name)
+            return self.session.run(None, {input_name: data})[0]
+        else:
+            tensor = torch.from_numpy(data).to(self.device)
+            result = self.model(tensor)
+            return result.numpy()
 
     def upscaleImage(self, image: Image):
         with torch.no_grad():
@@ -36,9 +50,8 @@ class Upscaler:
             #####
             array_y = np.array(y)[np.newaxis, np.newaxis].astype(
                 np.float32) / 255.0
-            tensor_y = torch.from_numpy(array_y).to(self.device)
-            result_y = self.model(tensor_y)
-            result_y = (result_y.numpy()[0, 0] * 255.0).astype(np.uint8)
+            result_y = self._upscale(array_y)
+            result_y = (result_y[0, 0] * 255.0).astype(np.uint8)
             result_image_y = Image.fromarray(result_y)
             #####
             cb_hr = cb.resize(hr_size, resample=Image.BICUBIC)
@@ -49,12 +62,12 @@ class Upscaler:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--onnx', dest='onnx', type=bool,
+    parser.add_argument('--onnx', action="store_true",
                         help='Should use ONNX format')
     parser.add_argument('--image', dest='imagePath',
                         type=str, help="Image path to upscale")
     args = parser.parse_args()
-    upscaler = Upscaler("result.pth", 2)
+    upscaler = Upscaler("result.pth", 2, onnx=args.onnx)
     image = upscaler.upscaleImage(Image.open(args.imagePath))
     new_path = Path(args.imagePath).with_stem(args.imagePath.stem + "_upscaled")
     image.convert("RGB").save(new_path)
