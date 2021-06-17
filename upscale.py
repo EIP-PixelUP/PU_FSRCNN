@@ -18,18 +18,18 @@ usage =\
 
 
 class Upscaler:
-    def __init__(self, weigths, scale):
+    def __init__(self, weights, scale):
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
         self.model = FSRCNN(**model_settings).to(self.device)
-        self.model.load_state_dict(torch.load('result.pth'))
+        self.model.load_state_dict(torch.load(weights))
         self.model.eval()
 
         self.scale = scale
 
-    def upscaleImage(self, imagePath: Path):
+    def upscaleImage(self, image: Image):
         with torch.no_grad():
-            original = Image.open(imagePath)
+            original = image
             hr_size = (original.width * self.scale,
                        original.height * self.scale)
             y, cb, cr = original.convert("YCbCr").split()
@@ -44,9 +44,6 @@ class Upscaler:
             cb_hr = cb.resize(hr_size, resample=Image.BICUBIC)
             cr_hr = cr.resize(hr_size, resample=Image.BICUBIC)
             new_image = Image.merge("YCbCr", (result_image_y, cb_hr, cr_hr))
-            new_path = imagePath.with_stem(imagePath.stem + "_upscaled")
-            new_image.convert("RGB").save(new_path)
-
             return new_image
 
 
@@ -58,5 +55,7 @@ if __name__ == "__main__":
                         type=str, help="Image path to upscale")
     args = parser.parse_args()
     upscaler = Upscaler("result.pth", 2)
-    image = upscaler.upscaleImage(Path(args.imagePath))
+    image = upscaler.upscaleImage(Image.open(args.imagePath))
+    new_path = args.imagePath.with_stem(args.imagePath.stem + "_upscaled")
+    image.convert("RGB").save(new_path)
     image.show()
