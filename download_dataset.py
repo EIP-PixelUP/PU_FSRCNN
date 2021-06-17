@@ -10,7 +10,7 @@ def download_dataset(name, format, url):
 		print("Request for", name, "failed, status code: ", request.status_code, file=sys.stderr)
 		return
 	try:
-		open('datasets/Dataset_'+name+"."+format, 'wb').write(request.content)
+		open('datasets/'+name+"."+format, 'wb').write(request.content)
 	except Exception as e:
 		print("Saving file for", name, "failed. Error: ", str(e))
 
