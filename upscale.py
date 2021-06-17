@@ -56,6 +56,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     upscaler = Upscaler("result.pth", 2)
     image = upscaler.upscaleImage(Image.open(args.imagePath))
-    new_path = args.imagePath.with_stem(args.imagePath.stem + "_upscaled")
+    new_path = Path(args.imagePath).with_stem(args.imagePath.stem + "_upscaled")
     image.convert("RGB").save(new_path)
     image.show()
