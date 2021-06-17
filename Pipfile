@@ -11,6 +11,7 @@ h5py = "*"
 tqdm = "*"
 onnx = "*"
 onnxruntime = "*"
+requests = "*"
 
 [dev-packages]
 
