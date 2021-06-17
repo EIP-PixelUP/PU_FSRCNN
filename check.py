@@ -29,8 +29,8 @@ if __name__ == "__main__":
                         type=str, help="Upscaled image", required=True)
     args = parser.parse_args()
     try:
-        val = compareImages(Image.open(args.original),
-                            Image.open(args.upscaled))
+        val = compareImages(Image.open(args.original).convert("RGB"),
+                            Image.open(args.upscaled).convert("RGB"))
         print("PSNR level of correspondance: ", val, "%")
     except ValueError as e:
         print("The two images must be of the same dimensions. Error: ", str(e))
