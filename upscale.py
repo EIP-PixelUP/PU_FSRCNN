@@ -25,6 +25,7 @@ class Upscaler:
 
         if onnx:
             self.session = onnxruntime.InferenceSession("fsrcnn.onnx")
+            print("Upscaling with ONNX")
         else:
             self.device = "cuda" if torch.cuda.is_available() else "cpu"
             self.model = FSRCNN(**model_settings).to(self.device)
