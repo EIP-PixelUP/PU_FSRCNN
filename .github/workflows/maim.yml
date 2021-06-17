@@ -1,0 +1,27 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: VaultVulp/action-pipenv@v2.0.1
+        with:
+          command: install
+
+      - name: download pixelup logo
+        run: wget https://eip.epitech.eu/2023/pixelup/icon_croped.png
+
+      - uses: VaultVulp/action-pipenv@v2.0.1
+        with:
+          command: run python ./test.py --image icon_croped.png
