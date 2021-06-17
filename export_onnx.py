@@ -12,8 +12,9 @@ model.eval()
 
 inputs = torch.ones(1, 1, 10, 10)
 
-torch.onnx.export(model, inputs, "fsrcnn.onnx", verbose=True,
-                  input_names=["input_image"], dynamic_axes={"input_image": [2, 3]})
+torch.onnx.export(
+    model, inputs, "fsrcnn.onnx", verbose=True,
+    input_names=["input_image"], dynamic_axes={"input_image": [2, 3]})
 
 
 onnx_model = onnx.load("fsrcnn.onnx")

@@ -19,7 +19,7 @@ usage =\
 
 
 class Upscaler:
-    def __init__(self, weigths, scale, *, onnx):
+    def __init__(self, weigths, scale, *, onnx: Path):
         self.onnx = onnx
         self.scale = scale
 

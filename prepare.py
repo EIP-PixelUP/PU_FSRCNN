@@ -94,4 +94,5 @@ def save_dataset(zip_file, dataset_file, *, scale, patch_size, augment=False):
 
 
 if __name__ == "__main__":
-    save_dataset("datasets/General-100.zip", "datasets/General-100.h5", scale=2, patch_size=10)
+    save_dataset("datasets/General-100.zip",
+                 "datasets/General-100.h5", scale=2, patch_size=10)
