@@ -2,6 +2,7 @@
 
 import sys
 import torch
+import argparse
 from PIL import Image
 import numpy as np
 from prepare import extract_y, augment_images, create_patches
@@ -31,20 +32,20 @@ def upscaleImage(imagePath : str):
 	image = None
 	for img in Pimage:
 		image = np.expand_dims(img[0] / 255., 0).astype(np.float32)
+	#####
 	tensor = torch.from_numpy(image).to(device)
 	result = model(tensor)
+	#####
 	return result
 
 if __name__ == "__main__":
 	try:
-		if len(sys.argv) != 2:
-			print(usage, file=sys.stderr)
-			sys.exit(84)
-		elif sys.argv[1] == '-h' or sys.argv[1] == '--help':
-			print(usage)
-			sys.exit(0)
-		image = upscaleImage(sys.argv[1])
-		print(image)
+		parser = argparse.ArgumentParser()
+		parser.add_argument('--onnx', dest='onnx', type=bool, help='Should use ONNX format')
+		parser.add_argument('--image', dest='imagePath', type=str, help="Image path to upscale")
+		args = parser.parse_args()
+		image = upscaleImage(args.imagePath)
+		image.show()
 	except Exception as e:
 		print("Following error occured while trying to upscale image: ", str(e), file=sys.stderr)
 		sys.exit(84)
