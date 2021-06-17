@@ -3,8 +3,6 @@
 
 ## Introduction
 
-Python version:		>= 3.9
-
 This folder contains various Python scripts allowing for handling datasets, setting up and training the neural network, and checking its results on images.
 This README will explain the steps to get a trained model ready for upscaling.
 All scripts may be used individually for their own specific task, but the order in which they are documented
@@ -16,7 +14,7 @@ represents the order in which to execute them to result in a trained model.
 * check
 * test
 * upscale
-
+* export_onnx
 
 
 ## Usage
@@ -62,7 +60,7 @@ If you want, you can set the hyperparameters in the file `config.py`.
 ### Upscale an image
 
 ``` sh
-./upscale.py --image PATH_TO_IMAGE
+./upscale.py --image PATH_TO_IMAGE [ --output PATH_TO_OUTPUT_IMAGE ]
 ```
 
 ### Export the ONNX model
