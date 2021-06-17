@@ -64,12 +64,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--onnx', action="store_true",
                         help='Should use ONNX format')
+    parser.add_argument('--output', dest='outputImagePath',
+                        type=str, help="Path for upscaled image, defaults to 'IMAGE_PATH_upscaled'")
     parser.add_argument('--image', dest='imagePath',
-                        type=str, help="Image path to upscale")
+                        type=str, help="Image path to upscale", required=True)
     args = parser.parse_args()
     image_path = Path(args.imagePath)
     upscaler = Upscaler("result.pth", 2, onnx=args.onnx)
     image = upscaler.upscaleImage(Image.open(image_path))
-    new_path = image_path.with_stem(image_path.stem + "_upscaled")
+    new_path = (image_path.with_stem(image_path.stem + "_upscaled") if args.outputImagePath == None else args.outputImagePath)
     image.convert("RGB").save(new_path)
-    image.show()
+    # image.show()
