@@ -9,6 +9,8 @@ torchvision = "*"
 pillow = "*"
 h5py = "*"
 tqdm = "*"
+onnx = "*"
+onnxruntime = "*"
 
 [dev-packages]
 
