@@ -19,20 +19,37 @@ represents the order in which to execute them to result in a trained model.
 
 
 
-## Download_dataset
+## Usage
 
-**Usage:**
-		python	download_dataset.py
-This will use the Datasets.json file to get a list of all the datasets to download, and will download them to the *datasets* folder
+### Install the environment using Pipenv
 
-**Tools:**
-		download_dataset(	Name	Format	Url	)
-Utilitary function permitting the download of any dataset using its Format (zip,h5..etc) and URL
+``` sh
+pipenv install
+```
 
+### Enter the environment using Pipenv
 
-## Prepare
+``` sh
+pipenv shell
+```
 
-**Usage:**
-		python	prepare.py
-This will take the datasets present in the *datesets* folder and will package them into .h5 dataset format files.
+### Download the dataset
+
+``` sh
+./download_dataset.py
+```
+
+### Prepare the dataset for training
+
+``` sh
+./prepare.py
+```
+
+### Train the model
+
+If you want, you can set the hyperparameters in the file `config.py`.
+
+``` sh
+./train.py
+```
 
