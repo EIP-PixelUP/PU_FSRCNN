@@ -34,7 +34,6 @@ class Upscaler:
     def _upscale(self, data: np.ndarray):
         if self.onnx:
             input_name = self.session.get_inputs()[0].name
-            print(input_name)
             return self.session.run(None, {input_name: data})[0]
         else:
             tensor = torch.from_numpy(data).to(self.device)
@@ -67,8 +66,9 @@ if __name__ == "__main__":
     parser.add_argument('--image', dest='imagePath',
                         type=str, help="Image path to upscale")
     args = parser.parse_args()
+    image_path = Path(args.imagePath)
     upscaler = Upscaler("result.pth", 2, onnx=args.onnx)
-    image = upscaler.upscaleImage(Image.open(args.imagePath))
-    new_path = Path(args.imagePath).with_stem(args.imagePath.stem + "_upscaled")
+    image = upscaler.upscaleImage(Image.open(image_path))
+    new_path = image_path.with_stem(image_path.stem + "_upscaled")
     image.convert("RGB").save(new_path)
     image.show()
