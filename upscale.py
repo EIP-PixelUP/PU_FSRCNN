@@ -74,4 +74,4 @@ if __name__ == "__main__":
     image = upscaler.upscaleImage(Image.open(image_path))
     new_path = (image_path.with_stem(image_path.stem + "_upscaled") if args.outputImagePath == None else args.outputImagePath)
     image.convert("RGB").save(new_path)
-    # image.show()
+    image.show()
