@@ -34,13 +34,13 @@ pipenv shell
 ### Download the dataset
 
 ``` sh
-./download_dataset.py
+python download_dataset.py
 ```
 
 ### Prepare the dataset for training
 
 ``` sh
-./prepare.py
+python prepare.py
 ```
 
 ### Train the model
@@ -48,30 +48,30 @@ pipenv shell
 If you want, you can set the hyperparameters in the file `config.py`.
 
 ``` sh
-./train.py
+python train.py
 ```
 
 ### Test the model 
 
 ``` sh
-./test.py --image PATH_TO_IMAGE
+python test.py --image PATH_TO_IMAGE
 ```
 
 ### Upscale an image
 
 ``` sh
-./upscale.py --image PATH_TO_IMAGE [ --output PATH_TO_OUTPUT_IMAGE ]
+python upscale.py --image PATH_TO_IMAGE [ --output PATH_TO_OUTPUT_IMAGE ]
 ```
 
 ### Export the ONNX model
 
 ``` sh
-./export_onnx.py 
+python export_onnx.py 
 ```
 
 It generates the file `fsrcnn.onnx`. You can then use the other scripts with ONNX by adding the `--onnx` flag.
 
 ``` sh
-./test.py --image PATH_TO_IMAGE --onnx
-./upscale.py --image PATH_TO_IMAGE --onnx
+python test.py --image PATH_TO_IMAGE --onnx
+python upscale.py --image PATH_TO_IMAGE --onnx
 ```
